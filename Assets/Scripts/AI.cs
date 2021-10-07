@@ -40,6 +40,9 @@ public class AI : MonoBehaviour
     private Vector3 playerLocation;
     private Vector3 enemyLocation;
 
+    public Ray enemySight;
+    public RaycastHit hitInfo;
+
     void Start()
     {
         enemy = GetComponent<NavMeshAgent>();
@@ -164,12 +167,23 @@ public class AI : MonoBehaviour
 
     void Update()
     {
+        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
+
         currentStateTxt.text = "Current State: " + enemyState;
         enemyLocation = enemy.transform.position;
         playerLocation = player.gameObject.transform.position;
         distance = Vector3.Distance(playerLocation, enemyLocation);
 
-        if (distance <= viewDistance && distance > attackDistance)
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+        //Debug.DrawRay(transform.position, Vector3.forward * hitInfo.distance, Color.red);
+        //Debug.DrawRay(transform.position, Vector3.forward, Color.red);
+        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+        {
+            if (hitInfo.collider.tag == "Player")
+            { Debug.Log("triggered!!!!"); }
+        }
+
+        /*if (distance <= viewDistance && distance > attackDistance)
         {
            SwitchState(State.Chasing);
         }
@@ -180,7 +194,7 @@ public class AI : MonoBehaviour
         if (distance <= attackDistance)
         {
             SwitchState(State.Attacking);
-        }
+        }*/
 
         if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
         {
