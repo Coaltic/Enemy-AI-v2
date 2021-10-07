@@ -8,10 +8,10 @@ using UnityEditor;
 [System.Serializable]
 
 
-public class Controller : MonoBehaviour
+public class Player : MonoBehaviour
 {
     //Urg that's ugly, maybe find a better way
-    public static Controller Instance { get; protected set; }
+    public static Player Instance { get; protected set; }
 
     //public Camera MainCamera;
 
@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
     public float CrouchingSpeed = 2.0f;
     public float JumpSpeed = 5.0f;
 
-   
+    public bool running;
 
     float m_VerticalSpeed = 0.0f;
     bool m_IsPaused = false;
@@ -115,7 +115,7 @@ public class Controller : MonoBehaviour
                 loosedGrounding = true;                
             }
 
-            bool running = Input.GetKey(KeyCode.LeftShift);
+            running = Input.GetKey(KeyCode.LeftShift);
             float actualSpeed = running ? RunningSpeed : PlayerSpeed;
 
             bool crouching = Input.GetKey(KeyCode.RightShift);

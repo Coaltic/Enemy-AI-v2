@@ -18,11 +18,12 @@ public class AI : MonoBehaviour
     }
 
     private State enemyState;
+    //public Player player;
 
     public Animator animator;
     public NavMeshAgent enemy;
 
-    public GameObject player;
+    public Player player;
     public Transform[] points;
 
     public TextMeshProUGUI currentStateTxt;
@@ -30,6 +31,7 @@ public class AI : MonoBehaviour
     public int patrolDestinationPoint;
     public int patrolDestinationAmount;
     public int viewDistance = 10;
+    public int hearingDistance = 20;
     public int attackDistance = 3;
     public float distance;
     public float searchTime = 8.0f;
@@ -170,6 +172,10 @@ public class AI : MonoBehaviour
         if (distance <= viewDistance && distance > attackDistance)
         {
            SwitchState(State.Chasing);
+        }
+        if (distance <= hearingDistance && player.running == true && distance > attackDistance)
+        {
+            SwitchState(State.Chasing);
         }
         if (distance <= attackDistance)
         {

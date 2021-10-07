@@ -2666,7 +2666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   enemy: {fileID: 0}
-  player: {fileID: 2140326737}
+  player: {fileID: 0}
   points:
   - {fileID: 598123280}
   - {fileID: 1373285383}
@@ -2677,6 +2677,7 @@ MonoBehaviour:
   patrolDestinationPoint: 0
   patrolDestinationAmount: 5
   viewDistance: 6
+  hearingDistance: 20
   attackDistance: 3
   distance: 0
   searchTime: 4
@@ -5824,7 +5825,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2076820356}
   enemy: {fileID: 2076820359}
-  player: {fileID: 2140326737}
+  player: {fileID: 2140326739}
   points:
   - {fileID: 598123280}
   - {fileID: 1373285383}
@@ -5838,6 +5839,7 @@ MonoBehaviour:
   patrolDestinationPoint: 0
   patrolDestinationAmount: 8
   viewDistance: 10
+  hearingDistance: 20
   attackDistance: 3
   distance: 0
   searchTime: 4
@@ -5877,12 +5879,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.69, z: 0}
---- !u!1 &2140326737 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2155358169863565898, guid: e0a781c065b735b41a847089a684852f,
+--- !u!114 &2140326739 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2155358169863565897, guid: e0a781c065b735b41a847089a684852f,
     type: 3}
   m_PrefabInstance: {fileID: 87642916}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879bd7ad7280c164f830fd5be7f93343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2140326742 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2155358169863565892, guid: e0a781c065b735b41a847089a684852f,
