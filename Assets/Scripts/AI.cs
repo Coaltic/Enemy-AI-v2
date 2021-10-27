@@ -63,7 +63,16 @@ public class AI : MonoBehaviour
         playerLocation = player.gameObject.transform.position;
         enemy.SetDestination(points[patrolDestinationPoint].position);
 
-        
+        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+        {
+            if (hitInfo.collider.tag == "Player")
+            {
+                Debug.Log("triggered!!!!");
+                SwitchState(State.Chasing);
+            }
+        }
+
+
     }
 
     void Chasing()
@@ -80,7 +89,14 @@ public class AI : MonoBehaviour
             SwitchState(State.Attacking);
         }
 
-        
+        if (distance >= viewDistance)
+        {
+            lastPlayerLocation = player.gameObject.transform.position;
+            searchTime = 8.0f;
+            SwitchState(State.Searching);
+        }
+
+
     }
 
     void Searching()
@@ -92,14 +108,28 @@ public class AI : MonoBehaviour
         animator.SetBool("Walking", false);
 
         enemy.SetDestination(enemyLocation);
-        
+
+        searchTime -= Time.deltaTime;
+
+        if (searchTime <= 0.0f)
+        {
+            SwitchState(State.Retreating);
+        }
+
+
+
     }
 
     void Listening()
     {
         //transform.LookAt(player.transform);
         enemy.SetDestination(playerLocation);
-        
+
+        if (distance >= hearingDistance)
+        {
+            SwitchState(State.Chasing);
+        }
+
     }
 
     void Retreating()
@@ -182,7 +212,7 @@ public class AI : MonoBehaviour
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
         
        
-        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+        /*if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
             if (hitInfo.collider.tag == "Player")
             { 
@@ -191,18 +221,15 @@ public class AI : MonoBehaviour
                 //chasingTime -= Time.deltaTime;
                 SwitchState(State.Chasing);
             }
-        }
+        }*/
         if (distance <= hearingDistance && player.running == true && distance > attackDistance)
         {
             SwitchState(State.Listening);
         }
 
-        if (distance <= attackDistance)
-        {
-            SwitchState(State.Attacking);
-        }
+        
 
-        if (enemyState == State.Chasing)
+        /*if (enemyState == State.Chasing)
         {
             SwitchState(State.Chasing);
             if (distance >= viewDistance)
@@ -211,9 +238,9 @@ public class AI : MonoBehaviour
                 searchTime = 8.0f;
                 SwitchState(State.Searching);
             }
-        }
+        }*/
 
-        if (enemyState == State.Searching)
+        /*if (enemyState == State.Searching)
         {
             searchTime -= Time.deltaTime;
 
@@ -221,15 +248,15 @@ public class AI : MonoBehaviour
             {
                 SwitchState(State.Retreating);
             }
-        }
+        }*/
 
-        if (enemyState == State.Listening)
+        /*if (enemyState == State.Listening)
         {
             if (distance >= hearingDistance)
             {
                 SwitchState(State.Chasing);
             }
-        }
+        }*/
         
 
         if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
