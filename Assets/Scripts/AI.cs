@@ -51,7 +51,57 @@ public class AI : MonoBehaviour
         SwitchState(State.Patrolling);
     }
 
-    
+    void Update()
+    {
+        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
+
+        currentStateTxt.text = "Current State: " + enemyState;
+        enemyLocation = enemy.transform.position;
+        playerLocation = player.gameObject.transform.position;
+        distance = Vector3.Distance(playerLocation, enemyLocation);
+
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
+
+        if (distance <= hearingDistance && player.running == true && distance > attackDistance)
+        {
+            SwitchState(State.Listening);
+        }
+        
+
+        switch (enemyState)
+        {
+            case State.Patrolling:
+                Debug.Log("State: Patrolling");
+                Patrolling();
+                break;
+
+            case State.Chasing:
+                Debug.Log("State: Chasing");
+                Chasing();
+                break;
+
+            case State.Searching:
+                Debug.Log("State: Searching");
+                Searching();
+                break;
+
+            case State.Listening:
+                Debug.Log("State: Listening");
+                Listening();
+                break;
+
+            case State.Retreating:
+                Debug.Log("State: Retreating");
+                Retreating();
+                break;
+
+            case State.Attacking:
+                Debug.Log("State: Attacking");
+                Attacking();
+                break;
+        }
+
+    }
 
     void Patrolling()
     {
@@ -70,6 +120,20 @@ public class AI : MonoBehaviour
                 Debug.Log("triggered!!!!");
                 SwitchState(State.Chasing);
             }
+        }
+
+        if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
+        {
+            Debug.Log("triggered");
+
+            patrolDestinationPoint = patrolDestinationPoint + 1;
+
+            if (patrolDestinationPoint >= patrolDestinationAmount)
+            {
+                patrolDestinationPoint = 0;
+            }
+
+            SwitchState(State.Patrolling);
         }
 
 
@@ -116,7 +180,14 @@ public class AI : MonoBehaviour
             SwitchState(State.Retreating);
         }
 
-
+        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+        {
+            if (hitInfo.collider.tag == "Player")
+            {
+                Debug.Log("triggered!!!!");
+                SwitchState(State.Chasing);
+            }
+        }
 
     }
 
@@ -145,6 +216,15 @@ public class AI : MonoBehaviour
         {
             SwitchState(State.Patrolling);
         }
+
+        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+        {
+            if (hitInfo.collider.tag == "Player")
+            {
+                Debug.Log("triggered!!!!");
+                SwitchState(State.Chasing);
+            }
+        }
     }
 
     void Attacking()
@@ -165,115 +245,8 @@ public class AI : MonoBehaviour
     void SwitchState(State newState)
     {
         enemyState = newState;
-
-        switch (enemyState)
-        {
-            case State.Patrolling:
-                Debug.Log("State: Patrolling");
-                Patrolling();
-                break;
-
-            case State.Chasing:
-                Debug.Log("State: Chasing");
-                Chasing();
-                break;
-
-            case State.Searching:
-                Debug.Log("State: Searching");
-                Searching();
-                break;
-
-            case State.Listening:
-                Debug.Log("State: Listening");
-                Listening();
-                break;
-
-            case State.Retreating:
-                Debug.Log("State: Retreating");
-                Retreating();
-                break;
-
-            case State.Attacking:
-                Debug.Log("State: Attacking");
-                Attacking();
-                break;
-        }
     }
 
-    void Update()
-    {
-        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
-
-        currentStateTxt.text = "Current State: " + enemyState;
-        enemyLocation = enemy.transform.position;
-        playerLocation = player.gameObject.transform.position;
-        distance = Vector3.Distance(playerLocation, enemyLocation);
-
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
-        
-       
-        /*if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
-        {
-            if (hitInfo.collider.tag == "Player")
-            { 
-                Debug.Log("triggered!!!!");
-                //chasingTime = 4.0f;
-                //chasingTime -= Time.deltaTime;
-                SwitchState(State.Chasing);
-            }
-        }*/
-        if (distance <= hearingDistance && player.running == true && distance > attackDistance)
-        {
-            SwitchState(State.Listening);
-        }
-
-        
-
-        /*if (enemyState == State.Chasing)
-        {
-            SwitchState(State.Chasing);
-            if (distance >= viewDistance)
-            {
-                lastPlayerLocation = player.gameObject.transform.position;
-                searchTime = 8.0f;
-                SwitchState(State.Searching);
-            }
-        }*/
-
-        /*if (enemyState == State.Searching)
-        {
-            searchTime -= Time.deltaTime;
-
-            if (searchTime <= 0.0f)
-            {
-                SwitchState(State.Retreating);
-            }
-        }*/
-
-        /*if (enemyState == State.Listening)
-        {
-            if (distance >= hearingDistance)
-            {
-                SwitchState(State.Chasing);
-            }
-        }*/
-        
-
-        if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
-        {
-            Debug.Log("triggered");
-
-            patrolDestinationPoint = patrolDestinationPoint + 1;
-            
-            if (patrolDestinationPoint >= patrolDestinationAmount)
-            {
-                patrolDestinationPoint = 0;
-            }
-
-            SwitchState(State.Patrolling);
-        }
-
-
-    }
+   
 
 }
