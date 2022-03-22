@@ -200,6 +200,10 @@ public class AI : MonoBehaviour
         {
             SwitchState(State.Chasing);
         }
+        if (distance <= attackDistance)
+        {
+            SwitchState(State.Attacking);
+        }
 
     }
 
